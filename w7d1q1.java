@@ -1,36 +1,38 @@
 import java.util.Scanner;
 
-public class WordOccurrence {
+public class EvaluateTestPapers {
     public static void main(String[] args) {
         Scanner str = new Scanner(System.in);
-        String paragraph = str.nextLine().toLowerCase();
-        String word = str.next().toLowerCase();
+
+        // Read the correct answers
+        String correctAnswers = str.nextLine().toUpperCase();
+
+        // Read the number of students
         int n = str.nextInt();
+        str.nextLine(); // consume the newline character
 
-        if (n <= 0) {
-            System.out.println("Incorrect Input");
-            return;
-        }
-        int count = 0;
-        int index = -1;
-        int lastOccurrenceIndex = -1;
-
-        while (true) {
-            index = paragraph.indexOf(word, index + 1);
-            if (index == -1) {
-                break; 
-            }
-            count++;
-            if (count == n) {
-                System.out.println(index);
+        // Evaluate the test papers of all the N students
+        for (int i = 0; i < n; i++) {
+            String answers = str.nextLine().toUpperCase();
+            if (answers.length() != correctAnswers.length()) {
+                System.out.println("Incorrect Input");
                 return;
             }
-            lastOccurrenceIndex = index;
+
+            double marks = 0;
+            for (int j = 0; j < answers.length(); j++) {
+                char answer = answers.charAt(j);
+                if (answer == 'X') {
+                    continue; // question not attempted, no marks added or deducted
+                }
+                char correctAnswer = correctAnswers.charAt(j);
+                if (answer == correctAnswer) {
+                    marks += 1;
+                } else {
+                    marks -= 0.25;
+                }
+            }
+            System.out.print(marks + " ");
         }
-        if (count == 0) {
-            System.out.println("Not Present");
-            return;
-        }
-        System.out.println(lastOccurrenceIndex);
     }
 }
